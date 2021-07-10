@@ -164,6 +164,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Product\AddCategory.cshtml" />
     <Content Include="Views\Product\EditCategory.cshtml" />
+    <Content Include="Views\Product\AddSubCategory.cshtml" />
+    <Content Include="Views\Product\EditSubCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />

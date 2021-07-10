@@ -11,9 +11,10 @@ namespace OnlineShop.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        [Required,Display(Name ="Sub Category Name")]
         public string SubCategory_Name { get; set; }
-        [ForeignKey("Category")]
+        [ForeignKey("Category"),Display(Name ="Category Name")]
+        [Required]
         public Nullable<int> Category_id { get; set; }
         public virtual CategoryModel Category { get; set; }
 

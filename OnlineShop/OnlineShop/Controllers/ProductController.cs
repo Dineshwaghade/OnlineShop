@@ -62,5 +62,56 @@ namespace OnlineShop.Controllers
             }
             return RedirectToAction("AddCategory");
         }
+        public ActionResult AddSubCategory()
+        {
+            ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
+            if (TempData["delete"] != null)
+            {
+                ViewBag.isDeleteSuccess = TempData["delete"];
+            }
+            ViewBag.CategoryList = repo.SubCategoryList();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddSubCategory(SubCategoryModel model)
+        {
+            ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
+
+            if (ModelState.IsValid)
+            {
+                var result = repo.AddNewSubCategory(model);
+                if (result > 0)
+                {
+                    ViewBag.isAddedSuccess = true;
+                    ModelState.Clear();
+                }
+            }
+            ViewBag.CategoryList = repo.SubCategoryList();
+            return View();
+        }
+        public ActionResult EditSubCategory(int id)
+        {
+            ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
+            ViewBag.CategoryList = repo.SubCategoryList();
+            var data = repo.GetSubCategoryById(id);
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult EditSubCategory(SubCategoryModel model)
+        {
+            ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
+            if (ModelState.IsValid)
+            {
+                ViewBag.isUpdated = repo.UpdateSubCategory(model);
+            }
+            return RedirectToAction("AddSubCategory");
+        }
+        public ActionResult DeleteSubCategory(int id)
+        {
+            TempData["delete"] = repo.RemoveSubCategory(id);
+            TempData.Keep();
+            return RedirectToAction("AddSubCategory");
+        }
+
     }
 }

@@ -18,6 +18,10 @@ namespace OnlineShop.Controllers
         }
         public ActionResult AddCategory()
         {
+            if(TempData["delete"]!=null)
+            {
+                ViewBag.isDeleteSuccess = TempData["delete"];
+            }
             ViewBag.CategoryList = repo.CategoryList();
             return View();
         }
@@ -29,12 +33,34 @@ namespace OnlineShop.Controllers
                 var result = repo.AddNewCategory(model);
                 if (result > 0)
                 {
-                    ViewBag.isSuccess = true;
+                    ViewBag.isAddedSuccess = true;
                     ModelState.Clear();
                 }
             }
             ViewBag.CategoryList = repo.CategoryList();
             return View();
+        }
+        public ActionResult DeleteCategory(int id)
+        {
+            TempData["delete"]= repo.RemoveCategory(id);
+            TempData.Keep();
+            return RedirectToAction("AddCategory");
+        }
+        public ActionResult EditCategory(int id)
+        {
+            ViewBag.CategoryList = repo.CategoryList();
+            var data = repo.GetCategoryById(id);
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult EditCategory(CategoryModel model)
+        {
+
+            if(ModelState.IsValid)
+            {
+               ViewBag.isUpdated= repo.UpdateCategory(model);
+            }
+            return RedirectToAction("AddCategory");
         }
     }
 }

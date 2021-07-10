@@ -163,6 +163,7 @@
     <Content Include="Views\Account\Registration.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Product\AddCategory.cshtml" />
+    <Content Include="Views\Product\EditCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />

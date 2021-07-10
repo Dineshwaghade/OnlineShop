@@ -31,5 +31,38 @@ namespace OnlineShop.Repository
                 .ToList();
             return CList;
         }
+        public bool RemoveCategory(int id)
+        {
+            var data = db.Categories.Find(id);
+            if(data!=null)
+            {
+                db.Categories.Remove(data);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public CategoryModel GetCategoryById(int id)
+        {
+            var data = db.Categories.Select(x => new CategoryModel()
+            {
+                Id = x.Id,
+                Category_Name = x.Category_Name
+            })
+            .Where(x=>id==x.Id)
+            .FirstOrDefault();
+            return data;
+        }
+        public bool UpdateCategory(CategoryModel model)
+        {
+            Category cat = new Category()
+            {
+                Id=model.Id,
+                Category_Name=model.Category_Name
+            };
+            db.Entry(cat).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return true;
+        }
     }
 }

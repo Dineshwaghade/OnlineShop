@@ -82,8 +82,21 @@ namespace OnlineShop.Repository
                 {
                     Id = x.Id,
                     Category_id = x.Category_id,
-                    SubCategory_Name=x.SubCategory_Name
+                    SubCategory_Name = x.SubCategory_Name
                 })
+                .ToList();
+            return CList;
+        }
+        public List<SubCategoryModel> GetSubCategoryListByC_ID(int cid)
+        {
+            var CList = db.SubCategories
+                .Select(x => new SubCategoryModel()
+                {
+                    Id = x.Id,
+                    Category_id = x.Category_id,
+                    SubCategory_Name = x.SubCategory_Name
+                })
+                .Where(x=>x.Category_id==cid)
                 .ToList();
             return CList;
         }
@@ -119,6 +132,77 @@ namespace OnlineShop.Repository
                 SubCategory_Name=model.SubCategory_Name
             };
             db.Entry(scat).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return true;
+        }
+        public int AddNewProduct(ProductModel model)
+        {
+            Product productModel = new Product()
+            {
+                Id = model.Id,
+                SubCategory_id = model.SubCategory_id,
+                Product_Name=model.Product_Name,
+                Description=model.Description,
+                Price=model.Price,
+                Cover_PhotoUrl=model.Cover_PhotoUrl
+            };
+            db.Products.Add(productModel);
+            db.SaveChanges();
+            return productModel.Id;
+        }
+        public List<ProductModel> ProductList()
+        {
+            var CList = db.Products
+                .Select(x => new ProductModel()
+                {
+                    Id = x.Id,
+                    SubCategory_id = x.SubCategory_id,
+                    Product_Name = x.Product_Name,
+                    Description=x.Description,
+                    Price=x.Price,
+                    Cover_PhotoUrl=x.Cover_PhotoUrl
+                })
+                .ToList();
+            return CList;
+        }
+        public bool RemoveProduct(int id)
+        {
+            var data = db.Products.Find(id);
+            if (data != null)
+            {
+                db.Products.Remove(data);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public ProductModel GetProductById(int id)
+        {
+            var data = db.Products.Select(x => new ProductModel()
+            {
+                Id = x.Id,
+                SubCategory_id = x.SubCategory_id,
+                Product_Name = x.Product_Name,
+                Description = x.Description,
+                Price = x.Price,
+                Cover_PhotoUrl = x.Cover_PhotoUrl
+            })
+            .Where(x => id == x.Id)
+            .FirstOrDefault();
+            return data;
+        }
+        public bool UpdateProduct(ProductModel model)
+        {
+            Product pro = new Product()
+            {
+                Id = model.Id,
+                SubCategory_id = model.SubCategory_id,
+                Product_Name = model.Product_Name,
+                Description = model.Description,
+                Price = model.Price,
+                Cover_PhotoUrl = model.Cover_PhotoUrl
+            };
+            db.Entry(pro).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return true;
         }

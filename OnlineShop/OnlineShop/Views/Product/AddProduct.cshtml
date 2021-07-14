@@ -1,0 +1,147 @@
+﻿@model OnlineShop.Models.ProductModel
+
+@{
+    ViewBag.Title = "AddProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <h2>Add Product</h2>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        if (ViewBag.isDeleteSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Category deleted successfully!</strong> You should check in on some of those fields below.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        if (ViewBag.isAddedSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Category Added successfully!</strong> You should check in on some of those fields below.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.DropDownList("Category", @ViewBag.clist as SelectList, "select", new { @class = "form-control" })
+                    @Html.ValidationMessage("Category", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SubCategory_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.SubCategory_id, new SelectList(""), "--Select SubCategory--", new { @class = "form-control" })
+@*                    @Html.DropDownListFor(model => model.SubCategory_id, @ViewBag.sclist as SelectList, "select", new { id = "slist", @class = "form-control", onChange = "return alert('hi')" })*@
+                    @Html.ValidationMessageFor(model => model.SubCategory_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Product_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Product_Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Product_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cover_Image, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    <input type="file" id="Cover_Image",class = "form-control" />
+                    @Html.ValidationMessageFor(model => model.Product_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+         
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <table class="table-striped col-md-12">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Id)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Product_Name)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.SubCategory_id)
+                </td>
+                <td></td>
+            </tr>
+            @if (ViewBag.productList != null)
+            {
+                foreach (var item in ViewBag.productList)
+                {
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Product_Name
+                        </td>
+                        <td>
+                            @item.SubCategory_id
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id })
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <span class="text-danger">No record found</span>
+            }
+        </table>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#Category').change(function () {
+            var cid = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: '/product/GetSubCategoryListByCid?cid=' + cid,
+                contentType: 'html',
+                success: function (response) {
+                    $('#SubCategory_id').empty();
+                    $('#SubCategory_id').append(response);
+                }
+            });
+        });
+    })
+</script>

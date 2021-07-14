@@ -1,0 +1,10 @@
+﻿<option value="">--Select SubCategory--</option>
+
+@if (ViewBag.sclist != null)
+{
+    foreach (var item in ViewBag.sclist)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+
+}

@@ -18,10 +18,6 @@ namespace OnlineShop.Controllers
             return PartialView("_StatePartialView");
         }
         // GET: Product
-        public ActionResult Index()
-        {
-            return View();
-        }
         //      -------------- Category ------------
         public ActionResult AddCategory()
         {
@@ -184,13 +180,13 @@ namespace OnlineShop.Controllers
             }
             return RedirectToAction("AddProduct");
         }
-        //public ActionResult DeleteSubCategory(int id)
-        //{
-        //    TempData["delete"] = repo.RemoveSubCategory(id);
-        //    TempData.Keep();
-        //    return RedirectToAction("AddSubCategory");
-        //}
-        //      -------------- End sub Category ------------
-        //      -------------- start product ------------
+        public ActionResult DeleteProduct(int id)
+        {
+            TempData["delete"] = repo.RemoveProduct(id);
+            TempData.Keep();
+            return RedirectToAction("AddProduct");
+        }
+//              -------------- End Product ------------
+
     }
 }

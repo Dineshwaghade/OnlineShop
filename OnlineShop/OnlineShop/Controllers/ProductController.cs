@@ -127,10 +127,13 @@ namespace OnlineShop.Controllers
         public ActionResult AddProduct()
         {
             ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
-//            ViewBag.sclist = new SelectList(repo.SubCategoryList(), "Id", "SubCategory_Name");
             if (TempData["delete"] != null)
             {
                 ViewBag.isDeleteSuccess = TempData["delete"];
+            }
+            if(TempData["isUpdate"]!=null)
+            {
+                ViewBag.isUpdateSuccess = TempData["isUpdate"];
             }
             ViewBag.productList = repo.ProductList();
             return View();
@@ -139,8 +142,6 @@ namespace OnlineShop.Controllers
         public ActionResult AddProduct(ProductModel model)
         {
             ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
-            ViewBag.sclist = new SelectList(repo.SubCategoryList(), "Id", "SubCategory_Name");
-            
             if (ModelState.IsValid)
             {
                 var result = repo.AddNewProduct(model);
@@ -153,23 +154,36 @@ namespace OnlineShop.Controllers
             ViewBag.productList = repo.ProductList();
             return View();
         }
-        //public ActionResult EditSubCategory(int id)
-        //{
-        //    ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
-        //    ViewBag.CategoryList = repo.SubCategoryList();
-        //    var data = repo.GetSubCategoryById(id);
-        //    return View(data);
-        //}
-        //[HttpPost]
-        //public ActionResult EditSubCategory(SubCategoryModel model)
-        //{
-        //    ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
-        //    if (ModelState.IsValid)
-        //    {
-        //        ViewBag.isUpdated = repo.UpdateSubCategory(model);
-        //    }
-        //    return RedirectToAction("AddSubCategory");
-        //}
+        public ActionResult EditProduct(int id)
+        {
+            DataContext db = new DataContext();
+            ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
+            var data = repo.GetProductById(id);
+
+            List<SubCategoryModel> sd = db.SubCategories.Select(x => new SubCategoryModel()
+            {
+                Category_id = x.Category_id,
+                Id = x.Id,
+                SubCategory_Name = x.SubCategory_Name
+            })
+        .Where(x => x.Category_id == data.Category_id)
+        .ToList();
+
+            ViewBag.slist = new SelectList(sd, "Id", "SubCategory_Name");
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult EditProduct(ProductModel model)
+        {
+            ViewBag.clist = new SelectList(repo.CategoryList(), "Id", "Category_Name");
+            if (ModelState.IsValid)
+            {
+                ViewBag.isUpdateSuccess = repo.UpdateProduct(model);
+                TempData["isUpdate"] = true;
+                TempData.Keep();
+            }
+            return RedirectToAction("AddProduct");
+        }
         //public ActionResult DeleteSubCategory(int id)
         //{
         //    TempData["delete"] = repo.RemoveSubCategory(id);

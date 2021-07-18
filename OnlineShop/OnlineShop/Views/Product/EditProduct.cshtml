@@ -1,0 +1,107 @@
+﻿@model OnlineShop.Models.ProductModel
+
+@{
+    ViewBag.Title = "EditProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <h2>EditProduct</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Category_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.Category_id, @ViewBag.clist as SelectList, "--Select Category--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Category_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SubCategory_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+
+                    @Html.DropDownListFor(model => model.SubCategory_id, @ViewBag.slist as SelectList, "--Select SubCategory--", new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.SubCategory_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Product_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Product_Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Product_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" } )
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cover_Image, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    <input type="file" id="Cover_Image" ,class="form-control" />
+                    @Html.ValidationMessageFor(model => model.Product_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    <a class="btn btn-primary" href="@Url.Action("AddProduct","Product")">Cancel</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#Category_id').change(function () {
+            var cid = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: '/product/GetSubCategoryListByCid?cid=' + cid,
+                contentType: 'html',
+                success: function (response) {
+                    $('#SubCategory_id').empty();
+                    $('#SubCategory_id').append(response);
+                }
+            });
+        });
+        $('#Category_id').ready(function () {
+            var cid = $('#Category_id').val();
+            var scid = $('#SubCategory_id').val();
+            $.ajax({
+                type: 'POST',
+                url: '/product/GetSubCategoryListByCid?cid=' + cid,
+                contentType: 'html',
+                success: function (response) {
+                }
+            });
+
+        })
+    })
+</script>

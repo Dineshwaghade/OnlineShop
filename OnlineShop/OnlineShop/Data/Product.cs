@@ -11,12 +11,13 @@ namespace OnlineShop.Data
     {
         [Key]
         public int Id { get; set; }
+        public Nullable<int> Category_id { get; set; }
+        [ForeignKey("SubCategory")]
+        public Nullable<int> SubCategory_id { get; set; }
         public string Product_Name { get; set; }
         public string Description { get; set; }
         public string Cover_PhotoUrl { get; set; }
         public Nullable<decimal> Price { get; set; }
-        [ForeignKey("SubCategory")]
-        public Nullable<int> SubCategory_id { get; set; }
         public virtual SubCategory SubCategory { get; set; }
 
     }

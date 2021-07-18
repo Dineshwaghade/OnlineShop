@@ -140,6 +140,7 @@ namespace OnlineShop.Repository
             Product productModel = new Product()
             {
                 Id = model.Id,
+                Category_id=model.Category_id,
                 SubCategory_id = model.SubCategory_id,
                 Product_Name=model.Product_Name,
                 Description=model.Description,
@@ -181,6 +182,7 @@ namespace OnlineShop.Repository
             var data = db.Products.Select(x => new ProductModel()
             {
                 Id = x.Id,
+                Category_id=x.Category_id,
                 SubCategory_id = x.SubCategory_id,
                 Product_Name = x.Product_Name,
                 Description = x.Description,
@@ -196,6 +198,7 @@ namespace OnlineShop.Repository
             Product pro = new Product()
             {
                 Id = model.Id,
+                Category_id=model.Category_id,
                 SubCategory_id = model.SubCategory_id,
                 Product_Name = model.Product_Name,
                 Description = model.Description,

@@ -15,7 +15,7 @@
         if (ViewBag.isDeleteSuccess == true)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Category deleted successfully!</strong> You should check in on some of those fields below.
+                <strong>Product deleted successfully!</strong> You should check in on some of those fields below.
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -24,27 +24,34 @@
         if (ViewBag.isAddedSuccess == true)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Category Added successfully!</strong> You should check in on some of those fields below.
+                <strong>Product Added successfully!</strong> You should check in on some of those fields below.
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         }
-
+        if (ViewBag.isUpdateSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Product updated successfully!</strong> You should check in on some of those fields below.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Category_id, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-6">
-                    @Html.DropDownList("Category", @ViewBag.clist as SelectList, "select", new { @class = "form-control" })
-                    @Html.ValidationMessage("Category", "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model=>model.Category_id, @ViewBag.clist as SelectList, "--Select Category--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Category_id, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.SubCategory_id, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-6">
                     @Html.DropDownListFor(model => model.SubCategory_id, new SelectList(""), "--Select SubCategory--", new { @class = "form-control" })
-@*                    @Html.DropDownListFor(model => model.SubCategory_id, @ViewBag.sclist as SelectList, "select", new { id = "slist", @class = "form-control", onChange = "return alert('hi')" })*@
                     @Html.ValidationMessageFor(model => model.SubCategory_id, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -58,7 +65,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-6">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" } )
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -91,11 +98,24 @@
                     @Html.DisplayNameFor(model => model.Id)
                 </td>
                 <td>
-                    @Html.DisplayNameFor(model => model.Product_Name)
+                    @Html.DisplayNameFor(model => model.Category_id)
                 </td>
                 <td>
                     @Html.DisplayNameFor(model => model.SubCategory_id)
                 </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Product_Name)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Description)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Price)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Cover_PhotoUrl)
+                </td>
+
                 <td></td>
             </tr>
             @if (ViewBag.productList != null)
@@ -107,10 +127,22 @@
                             @item.Id
                         </td>
                         <td>
-                            @item.Product_Name
+                            @item.Category_id
                         </td>
                         <td>
                             @item.SubCategory_id
+                        </td>
+                        <td>
+                            @item.Product_Name
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.Price
+                        </td>
+                        <td>
+                            @item.Cover_PhotoUrl
                         </td>
                         <td>
                             @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) |
@@ -131,7 +163,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#Category').change(function () {
+        $('#Category_id').change(function () {
             var cid = $(this).val();
             $.ajax({
                 type: 'POST',

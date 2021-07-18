@@ -199,6 +199,7 @@
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <Content Include="Views\Product\AddProduct.cshtml" />
     <Content Include="Views\Shared\_StatePartialView.cshtml" />
+    <Content Include="Views\Product\EditProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
